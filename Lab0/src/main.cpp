@@ -1,6 +1,6 @@
 #include "glad.h"
 #include "glfw3.h"
-
+#include <cstdlib>
 #include <iostream>
 #include <cmath>
 
@@ -8,8 +8,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 1200;
 
 const char *vertexShaderSource ="#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
@@ -102,9 +102,22 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
-         0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-         0.0f,  0.5f, 0.0f   // top 
+        // first triangle
+        -0.75f, 0.25f, 0.0f,  // left 
+        -0.25f, 0.25f, 0.0f,  // right
+        -0.5f, 0.75f, 0.0f,  // top 
+        // second triangle
+         0.25f, 0.25f, 0.0f,  // left
+         0.75f, 0.25f, 0.0f,  // right
+         0.5f, 0.75f, 0.0f,  // top
+         // third triangle
+         -0.75f, -0.75f, 0.0f,  // left
+         -0.25f, -0.75f, 0.0f,  // right
+         -0.5f, -0.25f, 0.0f,  // top
+         // fourth triangle
+         0.25f, -0.75f, 0.0f,  // left
+         0.75f, -0.75f, 0.0f,  // right
+         0.5f, -0.25f, 0.0f   // top
     };
 
     unsigned int VBO, VAO;
@@ -139,7 +152,7 @@ int main()
 
         // render
         // ------
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor((rand()%10), (rand()%10), (rand()%10), (rand()%10));
         glClear(GL_COLOR_BUFFER_BIT);
 
         // be sure to activate the shader before any calls to glUniform
@@ -147,12 +160,13 @@ int main()
 
         // update shader uniform
         double  timeValue = glfwGetTime();
-        float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
+        //float greenValue = static_cast<float>(sin(timeValue) / 2.0 + 0.5);
+        float greenValue = .8f;
         int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
         glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
         // render the triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 12);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
